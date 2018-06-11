@@ -90,10 +90,42 @@ for genre in favoriteGenres.sorted() {//升序排序来遍历
     print("\(genre)")
 }
 
+//集合操作
+/**
+ 使用intersection(_:)方法根据两个集合中都包含的值创建的一个新的集合。--交集
+ 使用symmetricDifference(_:)方法根据在一个集合中但不在两个集合中的值创建一个新的集合。
+ 使用union(_:)方法根据两个集合的值创建一个新的集合。//并集
+ 使用subtracting(_:)方法根据不在该集合中的值创建一个新的集合。
+ */
+let oddDigits: Set = [1, 3, 5, 7, 9]
+
+let evenDigits: Set = [0, 2, 4, 6, 8]
+
+let singleDigits: Set = [2, 3, 5, 7]
+
+oddDigits.intersection(evenDigits).sorted()//[]
+
+oddDigits.symmetricDifference(singleDigits).sorted()//[1, 2, 9]
+
+oddDigits.union(evenDigits).sorted()//[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+oddDigits.subtracting(singleDigits).sorted()//[1, 9]
+
+/**
+ 使用“是否相等”运算符(==)来判断两个集合是否包含全部相同的值。
+ 使用isSubset(of:)方法来判断一个集合中的值是否也被包含在另外一个集合中。
+ 使用isSuperset(of:)方法来判断一个集合中包含另一个集合中所有的值。
+ 使用isStrictSubset(of:)或者isStrictSuperset(of:)方法来判断一个集合是否是另外一个集合的子集合或者父集合并且两个集合并不相等。
+ 使用isDisjoint(with:)方法来判断两个集合是否不含有相同的值(是否没有交集)。
+ */
 
 
+//字典[key: value]
+var namesOfIntegers = [Int: String]()//创建空字典
+namesOfIntegers[16] = "sixteen"
+namesOfIntegers = [:]
 
-
+var airports = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
 
 
 
