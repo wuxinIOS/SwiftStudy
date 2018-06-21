@@ -127,19 +127,47 @@ namesOfIntegers = [:]
 
 var airports = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
 
+if airports.isEmpty {
+    print("The airports dictionary is empty.")
+} else {
+    print("The airports dictionary is not empty")
+}
 
+airports["LHR"] = "London"
 
+airports["LHR"] = "London Heathrow"
 
+// updateValue(_:forKey:)返回更新之前的原值，是可选的。若之前有值，就更新原值，若没有，则新增，返回nil值
+if let oldValue = airports.updateValue("Dublin Airport", forKey: "DUB") {
+    print("The old value for DUB was \(oldValue)")
+}
 
+airports["APL"] = "Apple Internation"
 
+airports["APL"] = nil
 
+//removeValue(forKey:)方法也可以用来在字典中移除键值对。这个方法在键值对存在的情况下会移除该键值对并且返回被移除的值或者在没有值的情况下返回nil：
 
+if let removedValue = airports.removeValue(forKey: "DUB") {
+    print("The removed airport's name is \(removedValue)")
+} else {
+    print("The airports dictionary does not contain a value for DUB")
+}
 
+//字典遍历
+for (airportCode, airportName) in airports {
+    print("\(airportCode):\(airportName)")
+}
 
+for airportCode in airports.keys {
+    print("Airport code:\(airportCode)")
+}
 
+for airportName in airports.values {
+    print("Airport name:\(airportName)")
+}
 
-
-
+let airportCode = [String](airports.keys)
 
 
 

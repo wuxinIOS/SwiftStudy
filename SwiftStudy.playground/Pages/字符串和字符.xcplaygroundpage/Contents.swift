@@ -20,6 +20,7 @@ let singleLineString = "There are the same."
 let mulitilineString = """
 These are the same.
 """
+
 //你的代码中，多行字符串字面量包含换行符的话，则多行字符串字面量中也会包含换行符。如果你想换行，以便加强代码的可读性，但是你又不想在你的多行字符串字面量中出现换行符的话，你可以用在行尾写一个反斜杠(\)作为续行符。
 let softWrappedQuotation = """
 The White Rabbit put on his spectacles.  "Where shall I begin, \
@@ -64,6 +65,7 @@ let constantString = "Highlander"
 for charater in "Dog!🐶" {
     print(charater)
 }
+
 // 通过标明一个Character类型并用字符字面量进行赋值，可以建立一个独立的字符常量或变量：
 let exclamationMark: Character = "!"
 let exclamationMarkString = "!"
@@ -74,7 +76,6 @@ let catString = String(catCharaters)
 print(catString)
 
 //连接字符串和字符
-
 let string1 = "hello"
 let string2 = " there"
 var welcome = string1 + string2
