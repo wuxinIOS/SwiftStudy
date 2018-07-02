@@ -302,6 +302,7 @@ breakfastList[0].name = "Orange jucie"
 breakfastList[0].purchased = true
 for item in breakfastList {
     print(item.description)
+}
 //可失败构造器
 // 如果一个类、结构体或枚举类型的对象，在构造器中有可能失败，则为其定义一个可失败构造器。其语法为：init?
 //注意：可失败构造器的参数名和参数类型，不能与其他非可选构造器的参数名，及其参数类型相同
@@ -385,7 +386,6 @@ class CartItem: Product {
 }
 if let twoSocks = CartItem(name: "sock", quantity: 2) {
     print("Item:\(twoSocks.name), quantity:\(twoSocks.quantity)")
->>>>>>> 42bf8064045c3ab20fd588dd9176a10cc7819c5e
 }
 
 if let zeroShirts = CartItem(name: "shirt", quantity: 0) {
