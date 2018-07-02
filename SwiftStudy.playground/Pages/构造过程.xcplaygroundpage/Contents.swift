@@ -98,7 +98,7 @@ cheeseQuestion.response = "Yes, I do like cheese."
 print(cheeseQuestion.response ?? "NO")
 
 // 构造过程中常量属性的修改
-// 可以在构造过程中的任意时间点给常量属性呢指定一个值，只要在构造过程结束时是一个确定的值。一旦常量属性被赋值，它将永远不可更改
+// 可以在构造过程中的任意时间点给常量属性指定一个值，只要在构造过程结束时是一个确定的值。一旦常量属性被赋值，它将永远不可更改
 // 对于类的实例来说，它的常量属性只能在定义它的类的构造过程中修改，不能在子类中修改
 
 
@@ -110,6 +110,7 @@ class ShoppingListItemT {
     var purchased = false
 }
 
+
 // 结构体的逐一成员构造器
 // 除了上面提到的默认构造器，如果结构体没有提供自定义的构造器，它们将自动获得一个逐一成员构造器，即使结构体的存储型属性没有默认值。
 struct Size {
@@ -118,12 +119,20 @@ struct Size {
 
 let twoByTwo = Size(width: 2.0, height: 2.0)
 
+struct SizeT {
+    var width: Double
+    var height: Double
+}
+
+//结构体允许存储属性不赋初始值，但是类必须有初始值
+
 // 值类型的构造器代理
 // 构造器可以通过调用其他构造器来完成实例的部分构造过程。这一过程称为构造器代理，他能减少过个构造器间的重复代码。
 
 // 对于值类型，你可以使用self.init在自定义的构造器中引用相同类型中的其它构造器。并且你只能在构造器内部调用self.init。
 
 // 如果你为某个值类型定义了一个自定义的构造器，你将无法访问到默认构造器（如果是结构体，还将无法访问逐一成员构造器）。这种限制可以防止你为值类型增加了一个额外的且十分复杂的构造器之后,仍然有人错误的使用自动生成的构造器
+// 在值类型中，没有便利构造器这一个说法
 struct Point {
     var x = 0.0, y = 0.0
 }
@@ -194,6 +203,7 @@ let centerRect = Rect(center: Point(x: 4.0, y: 4.0),
 // Swift中的子类默认情况下不会继承父类的构造器。
 
 class Vehicle {
+    let number: Int = 2
     var numberOfWheels = 0
     var description: String {
         return "\(numberOfWheels) wheel(s)"
@@ -234,7 +244,7 @@ print("Bicycle: \(bicycel.description)")
 // 构造器的自动继承
 // 假设为子类中引入的所有新属性都提供了默认值，以下2个规则适用：
 // 1.如果子类没有定义任何指定构造器，它将自动继承所有父类的指定构造器.
-// 2.如果子类提供了所有父类指定构造器的实现--无论是通过规则1继承过来的，还是提供了自定义实现--它将自动继承所有父类的便利构造器.
+// 2.如果子类提供了所有父类指定构造器的实现--无论是通过规则1继承过来的，还是提供了自定义实现(重写或者重写为便利构造器了都算提供了自定义实现)--它将自动继承所有父类的便利构造器.
 
 // 指定构造器和便利构造器实践
 
@@ -277,10 +287,20 @@ class ShoppingListItem: RecipeIngredient {
     var purchased = false
     var description: String {
         var output = "\(quantity) x \(name)"
-        output += purchased ? "" : ""
+        output += purchased ? "✔️" : "❌"
         return output
     }
     
 }
 
+var breakfastList = [
+    ShoppingListItem(),
+    ShoppingListItem(name: "Bacon"),
+    ShoppingListItem(name: "Eggs", quantity: 6),
+]
+breakfastList[0].name = "Orange jucie"
+breakfastList[0].purchased = true
+for item in breakfastList {
+    print(item.description)
+}
 
