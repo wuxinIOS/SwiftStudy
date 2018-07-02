@@ -283,4 +283,152 @@ class ShoppingListItem: RecipeIngredient {
     
 }
 
+//可失败构造器
+// 如果一个类、结构体或枚举类型的对象，在构造器中有可能失败，则为其定义一个可失败构造器。其语法为：init?
+//注意：可失败构造器的参数名和参数类型，不能与其他非可选构造器的参数名，及其参数类型相同
+struct Animal {
+    let species: String
+    init?(species: String) {
+        if species.isEmpty {
+            return nil
+        }
+        self.species = species
+    }
+}
 
+let someCreature = Animal(species: "Giraffe")
+if let giraffe = someCreature {
+    print("An animal was initialized with a species of \(giraffe.species)")
+}
+
+let anonymousCreature = Animal(species: "")
+if anonymousCreature == nil {
+    print("The anonymous creature could not be initialized")
+}
+
+// 枚举类型的可失败构造器
+enum TemperatureUnit {
+    case Kelvin, Celsius, Fahrenheit
+    init?(symbol: Character) {
+        switch symbol {
+        case "K":
+            self = .Kelvin
+        case "C":
+            self = .Celsius
+        case "F":
+            self = .Fahrenheit
+        default:
+            return nil
+        }
+    }
+}
+
+let hahrenheitUnit = TemperatureUnit(symbol: "F")
+if hahrenheitUnit != nil {
+    print("This is a defined temperature unit, so initialization successed.")
+}
+
+let unkonwnUnit = TemperatureUnit(symbol: "X")
+if unkonwnUnit == nil {
+    print("This is not a defined temperature unit, so initialized failed.")
+}
+
+// 带原始值的枚举类型的可失败构造器
+// 带原始值的枚举类型会自带一个可失败构造器init?(rawValue:),该可失败构造器有一个名为rawValue的参数，其类型和枚举类型的原始值类型一致，如果该参数的值能够和某个枚举成员的原始值匹配，则该构造器会构造相应的枚举成员，否则构造失败。
+enum TemperatureUnitT: Character {
+    case Kelvin = "K", Celsius = "C", Fahrenheit = "F"
+}
+let fahrenheitUnitT = TemperatureUnitT(rawValue: "F")
+
+let unknownUnit = TemperatureUnitT(rawValue: "X")
+
+// 构造失败的传递
+// 类、结构体、枚举的可失败构造器可以横向代理到类型中的其他可失败构造器。类似的，子类的可失败构造器也能向上代理到父类的可失败构造器
+// 无论是向上代理还是横向代理，如果你代理到的其他可失败构造器触发构造失败，整个构造过程将立即终止，接下来的任何构造代码不会再被执行。
+
+class Product {
+    let name: String
+    init?(name: String){
+        if name.isEmpty {return nil}
+        self.name = name
+    }
+}
+
+class CartItem: Product {
+    let quantity: Int
+    init?(name: String, quantity: Int) {
+        if quantity < 1 {
+            return nil
+        }
+        self.quantity = quantity
+        super.init(name: name)
+    }
+}
+if let twoSocks = CartItem(name: "sock", quantity: 2) {
+    print("Item:\(twoSocks.name), quantity:\(twoSocks.quantity)")
+}
+
+if let zeroShirts = CartItem(name: "shirt", quantity: 0) {
+    print("Item:\(zeroShirts.name),quantity:\(zeroShirts.quantity)")
+} else {
+    print("Unable to initialize zero shirts")
+}
+// 重写一个可失败构造器
+// 如同其它的构造器，你可以在子类中重写父类的可失败构造器。或者你也可以用子类的非可失败构造器重写一个父类的可失败构造器。这使你可以定义一个不会构造失败的子类，即使父类的构造器允许构造失败。
+
+class Document {
+    var name: String?
+    init() {}
+    init?(name: String) {
+        self.name = name
+        if name.isEmpty { return nil }
+    }
+}
+
+class AutomaticallyNameDocument: Document {
+    override init() {
+        super.init()
+        self.name = "[Untitled]"
+    }
+    
+    override init?(name: String) {
+        super.init()
+        if name.isEmpty {
+            self.name = "[Untitled]"
+        } else {
+            self.name = name
+        }
+    }
+}
+
+// 必要构造器
+// 在类的构造器前添加 required 修饰符表明所有该类的子类都必须实现该构造器
+class SomeClass {
+    required init() {
+    }
+}
+// 在子类重写父类的必要构造器时，必须在子类的构造器前也添加required修饰符，表明该构造器要求也应用于继承链后面的子类。在重写父类中必要的指定构造器时，不需要添加override修饰符：
+class SomeSubclass: SomeClass {
+    required init() {
+        
+    }
+}
+
+
+// 通过闭包或函数设置属性的默认值
+//如果某个存储型属性的默认值需要一些定制或设置，你可以使用闭包或全局函数为其提供定制的默认值。每当某个属性所在类型的新实例被创建时，对应的闭包或函数会被调用，而它们的返回值会当做默认值赋值给这个属性。
+
+// 这种类型的闭包或函数通常会创建一个跟属性类型相同的临时变量，然后修改它的值以满足预期的初始状态，最后返回这个临时变量，作为属性的默认值。
+
+// 如果你使用闭包来初始化属性，请记住在闭包执行时，实例的其它部分都还没有初始化。这意味着你不能在闭包里访问其它属性，即使这些属性有默认值。同样，你也不能使用隐式的self属性，或者调用任何实例方法
+/**
+     class SomeClassT {
+        let someProperty: SomeType = {
+            //在这个闭包中给 someProperty创建一个默认值
+            //someValue必须和 someType类型相同
+            return someValue
+        }()
+     }
+ 
+ 
+ */
